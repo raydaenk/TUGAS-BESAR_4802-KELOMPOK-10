@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1765718261 source:c:\users\figom\onedrive\dokumen\tubes ray\mlist\mlist.cpp
+	"MLIST.h"
+	<iostream>
+	<string>
+
+1765718518 c:\users\figom\onedrive\dokumen\tubes ray\mlist\mlist.h
+	<iostream>
+	<string>
+
+1765718412 source:c:\users\figom\onedrive\dokumen\tubes ray\mlist\main.cpp
+	<iostream>
+	<string>
+	"MLIST.h"
+
