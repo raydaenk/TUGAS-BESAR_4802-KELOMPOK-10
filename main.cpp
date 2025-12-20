@@ -10,26 +10,42 @@ int main() {
 
     int choice;
 
+    insertFilmByCondition(filmList, createFilm(101, "The Matrix", 1999));
+    insertFilmByCondition(filmList, createFilm(102, "Inception", 2010));
+    insertFilmByCondition(filmList, createFilm(103, "Interstellar", 2014));
+    insertFilmByCondition(filmList, createFilm(104, "Titanic", 1997));
+    insertFilmByCondition(filmList, createFilm(105, "Avengers: Endgame", 2019));
+    insertFilmByCondition(filmList, createFilm(106, "Joker", 2019));
+    insertFilmByCondition(filmList, createFilm(107, "Gladiator", 2000));
+    insertFilmByCondition(filmList, createFilm(108, "Parasite", 2019));
+    insertFilmByCondition(filmList, createFilm(109, "The Dark Knight", 2008));
+    insertFilmByCondition(filmList, createFilm(110, "Forrest Gump", 1994));
+
+    // --- AKTOR (5) ---
+    insertActorByCondition(actorList, createActor(201, "Keanu Reeves", 58));
+    insertActorByCondition(actorList, createActor(202, "Leonardo DiCaprio", 49));
+    insertActorByCondition(actorList, createActor(203, "Robert Downey Jr.", 59));
+    insertActorByCondition(actorList, createActor(204, "Joaquin Phoenix", 50));
+    insertActorByCondition(actorList, createActor(205, "Tom Hanks", 67));
+
     while (true) {
         cout << "\n=========== MENU =============\n";
         cout << "1. Tambahkan Film\n";
-        cout << "2. Tambahkan Aktor + Buat Relasi\n";
+        cout << "2. Tambahkan Aktor \n";
         cout << "3. Hapus Film (ID)\n";
         cout << "4. Hapus Aktor (ID)\n";
         cout << "5. Tampilkan aktor dalam film\n";
         cout << "6. Tampilkan film dari aktor\n";
         cout << "7. Update performa aktor\n";
         cout << "8. Aktor dengan performa terbaik\n";
-        cout << "9. Insert Film by Condition\n";
-        cout << "10. Insert Actor by Condition\n";
-        cout << "11. Delete film by condition\n";
-        cout << "12. Delete actor by condition\n";
-        cout << "13. Searching film (tahun > ...)\n";
-        cout << "14. Komputasi statistik\n";
-        cout << "15. Assign aktor yang belum punya film\n";
-        cout << "16. Tampilkan semua film\n";
-        cout << "17. Tampilkan semua aktor\n";
-        cout << "18. Jalankan Studi Kasus\n";
+        cout << "9. Delete film by condition\n";
+        cout << "10. Delete actor by condition\n";
+        cout << "11. Searching film (tahun > ...)\n";
+        cout << "12. Komputasi statistik\n";
+        cout << "13. Masukkan aktor ke dalam film \n";
+        cout << "14. Tampilkan semua film\n";
+        cout << "15. Tampilkan semua aktor\n";
+        cout << "16. Jalankan Studi Kasus\n";
         cout << "0. Keluar\n";
         cout << "Pilih: ";
         cin >> choice;
@@ -40,24 +56,29 @@ int main() {
         else if (choice == 1) {
             int id, year;
             string title;
-            cout << "ID: ";
+
+            cout << "ID Film: ";
             cin >> id;
 
-            if (findFilm(filmList, id) != nullptr) {
+            if (findFilm(filmList, id)) {
                 cout << "Film dengan ID tersebut sudah ada.\n";
                 continue;
             }
 
-            cout << "Title: ";
+            cout << "Judul Film: ";
             cin.ignore();
             getline(cin, title);
 
-            cout << "Year: ";
+            cout << "Tahun Rilis: ";
             cin >> year;
 
-            insertFilm(filmList, createFilm(id, title, year));
-            cout << "Film berhasil ditambahkan.\n";
+            Film* f = createFilm(id, title, year);
+
+            insertFilmByCondition(filmList, f);
+
+            cout << "Film berhasil ditambahkan (otomatis terurut).\n";
         }
+
 
         else if (choice == 2) {
             int id, age;
@@ -66,39 +87,26 @@ int main() {
             cout << "ID Aktor: ";
             cin >> id;
 
-            if (findActor(actorList, id) != nullptr) {
+            if (findActor(actorList, id)) {
                 cout << "Aktor dengan ID tersebut sudah ada.\n";
                 continue;
             }
 
-            cout << "Nama: ";
+            cout << "Nama Aktor: ";
             cin.ignore();
             getline(cin, name);
 
             cout << "Usia: ";
             cin >> age;
 
-            Actor* A = createActor(id, name, age);
-            insertActor(actorList, A);
+            Actor* a = createActor(id, name, age);
 
-            cout << "Pilih ID film (0 = skip): ";
-            int fid;
-            cin >> fid;
+            insertActorByCondition(actorList, a);
 
-            if (fid != 0) {
-                Film* F = findFilm(filmList, fid);
-
-                if (!F) cout << "Film tidak ditemukan.\n";
-                else {
-                    if (actorAlreadyLinked(F, A)) {
-                        cout << "Aktor sudah ada di film ini.\n";
-                    } else {
-                        connectFilmActor(F, A);
-                        cout << "Relasi berhasil dibuat.\n";
-                    }
-                }
-            }
+            cout << "Aktor berhasil ditambahkan.\n";
         }
+
+
 
         else if (choice == 3) {
             int id;
@@ -181,52 +189,6 @@ int main() {
         }
 
         else if (choice == 9) {
-            int id, year;
-            string title;
-
-            cout << "ID Film: ";
-            cin >> id;
-
-            if (findFilm(filmList, id) != nullptr) {
-                cout << "Film dengan ID tersebut sudah ada.\n";
-                continue;
-            }
-
-            cout << "Judul Film: ";
-            cin.ignore();
-            getline(cin, title);
-
-            cout << "Tahun: ";
-            cin >> year;
-
-            insertFilmByCondition(filmList, createFilm(id, title, year));
-            cout << "Film dimasukkan sesuai urutan.\n";
-        }
-
-        else if (choice == 10) {
-            int id, age;
-            string name;
-
-            cout << "ID Aktor: ";
-            cin >> id;
-
-            if (findActor(actorList, id) != nullptr) {
-                cout << "Aktor dengan ID tersebut sudah ada.\n";
-                continue;
-            }
-
-            cout << "Nama Aktor: ";
-            cin.ignore();
-            getline(cin, name);
-
-            cout << "Usia: ";
-            cin >> age;
-
-            insertActorByCondition(actorList, createActor(id, name, age));
-            cout << "Aktor dimasukkan sesuai urutan.\n";
-        }
-
-        else if (choice == 11) {
             int limit;
             cout << "Hapus film dengan tahun < ";
             cin >> limit;
@@ -235,24 +197,24 @@ int main() {
             cout << "Film berhasil dihapus berdasarkan kondisi.\n";
         }
 
-        else if (choice == 12) {
+        else if (choice == 10) {
             int limit;
-            cout << "Hapus aktor dengan usia > ";
+            cout << "Hapus aktor dengan performa < ";
             cin >> limit;
 
             deleteActorByCondition(actorList, limit);
-            cout << "Aktor berhasil dihapus berdasarkan kondisi.\n";
+            cout << "Aktor Telah terhapus.\n";
         }
 
-        else if (choice == 13) {
+        else if (choice == 11) {
             searchByCondition(filmList, actorList);
         }
 
-        else if (choice == 14) {
+        else if (choice == 12) {
             computeStatistics(filmList, actorList);
         }
 
-        else if (choice == 15) {
+        else if (choice == 13) {
             cout << "\n=== Assign Aktor yang Belum Punya Film ===\n";
 
             showAllActors(actorList);
@@ -267,10 +229,6 @@ int main() {
                 continue;
             }
 
-            if (actorHasFilm(a)) {
-                cout << "Aktor ini sudah memiliki film.\n";
-                continue;
-            }
 
             cout << "\nPilih Film Tujuan:\n";
             showAllFilms(filmList);
@@ -291,17 +249,17 @@ int main() {
             }
         }
 
-        else if (choice == 16) {
+        else if (choice == 14) {
             cout << "\n=== SEMUA FILM ===\n";
             showAllFilms(filmList);
         }
 
-        else if (choice == 17) {
+        else if (choice == 15) {
             cout << "\n=== SEMUA AKTOR ===\n";
             showAllActors(actorList);
         }
 
-        else if (choice == 18) {
+        else if (choice == 16) {
             menuStudiKasus(filmList, actorList);
         }
     }
