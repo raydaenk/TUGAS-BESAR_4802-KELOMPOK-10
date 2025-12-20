@@ -37,8 +37,6 @@ struct Relation {
 Film* createFilm(int id, string title, int year);
 Actor* createActor(int id, string name, int age);
 
-void insertFilm(Film*& head, Film* newFilm);
-void insertActor(Actor*& head, Actor* newActor);
 void insertFilmByCondition(Film*& head, Film* newFilm);
 void insertActorByCondition(Actor*& head, Actor* newActor);
 
