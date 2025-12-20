@@ -25,17 +25,6 @@ Actor* createActor(int id, string name, int age) {
     return a;
 }
 
-
-void insertFilm(Film*& head, Film* newFilm) {
-    newFilm->next = head;
-    head = newFilm;
-}
-
-void insertActor(Actor*& head, Actor* newActor) {
-    newActor->next = head;
-    head = newActor;
-}
-
 void insertFilmByCondition(Film*& head, Film* newFilm) {
     if (!head || newFilm->year < head->year) {
         newFilm->next = head;
